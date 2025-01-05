@@ -21,6 +21,7 @@ import 'package:flutter_login/src/widgets/hero_text.dart';
 import 'package:flutter_login/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_in_button/sign_in_button.dart';
+import 'package:rive/rive.dart' hide Image;
 
 export 'package:sign_in_button/src/button_list.dart';
 
@@ -139,7 +140,7 @@ class _Header extends StatefulWidget {
     required this.loginTheme,
   });
 
-  final ImageProvider? logo;
+  final Widget? logo;
   final String? logoTag;
   final double logoWidth;
   final String? title;
@@ -207,21 +208,20 @@ class __HeaderState extends State<_Header> {
     final displayLogo = widget.logo != null && logoHeight >= kMinLogoHeight;
     final cardWidth = min(MediaQuery.of(context).size.width * 0.75, 360.0);
 
-    var logo = displayLogo
-        ? Image(
-            image: widget.logo!,
-            filterQuality: FilterQuality.high,
+    var logo = widget.logo != null
+        ? SizedBox(
             height: logoHeight,
             width: widget.logoWidth * cardWidth,
+            child: widget.logo, // Usa direttamente il widget passato
           )
         : const SizedBox.shrink();
 
-    if (widget.logoTag != null) {
-      logo = Hero(
-        tag: widget.logoTag!,
-        child: logo,
-      );
-    }
+    // if (widget.logoTag != null) {
+    //   logo = Hero(
+    //     tag: widget.logoTag!,
+    //     child: logo,
+    //   );
+    // }
 
     Widget? title;
     if (widget.titleTag != null && !isNullOrEmpty(widget.title)) {
@@ -285,7 +285,8 @@ class FlutterLogin extends StatefulWidget {
     this.title,
 
     /// The [ImageProvider] or asset path [String] for the logo image to be displayed
-    dynamic logo,
+    // dynamic logo,
+    this.logo,
     this.messages,
     this.theme,
     this.userValidator,
@@ -319,9 +320,11 @@ class FlutterLogin extends StatefulWidget {
     this.onSwitchToAdditionalFields,
     this.initialIsoCode,
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
-  })  : assert((logo is String?) || (logo is ImageProvider?)),
-        logo = logo is String ? AssetImage(logo) : logo as ImageProvider?;
+  });
+  // : assert((logo is String?) || (logo is ImageProvider?)),
+  //       logo = logo is String ? AssetImage(logo) : logo as ImageProvider?;
 
+  final Widget? logo; // Cambiato da ImageProvider? a Widget?
   ///AGGIUNTI DA ME PER FOCUS
   final FocusNode? userFocusNode;
   final FocusNode? passwordFocusNode;
@@ -351,7 +354,7 @@ class FlutterLogin extends StatefulWidget {
   final String? title;
 
   /// The image provider for the logo image to be displayed
-  final ImageProvider? logo;
+  // final ImageProvider? logo;
 
   /// Describes all of the labels, text hints, button texts and other auth
   /// descriptions
