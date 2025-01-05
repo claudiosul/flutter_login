@@ -54,7 +54,17 @@ class AuthCard extends StatefulWidget {
     this.introWidget,
     required this.initialIsoCode,
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
+
+    ///AGGIUNTI DA ME PER FOCUS
+    this.userFocusNode, // Aggiunto
+    this.passwordFocusNode, // Aggiunto
+    this.confirmPasswordFocusNode, // Aggiunto
   });
+
+  ///AGGIUNTI DA ME PER FOCUS
+  final FocusNode? userFocusNode; // Aggiunto
+  final FocusNode? passwordFocusNode; // Aggiunto
+  final FocusNode? confirmPasswordFocusNode; // Aggiunto
 
   final EdgeInsets padding;
   final AnimationController loadingController;
@@ -203,6 +213,11 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
     _pageController.dispose();
     _routeTransitionController.dispose();
     _scrollController.dispose();
+
+    // ///AGGIUNTI DA ME PER FOCUS
+    // widget.userFocusNode?.dispose();
+    // widget.passwordFocusNode?.dispose();
+    // widget.confirmPasswordFocusNode?.dispose();
     super.dispose();
   }
 
@@ -381,6 +396,14 @@ class AuthCardState extends State<AuthCard> with TickerProviderStateMixin {
             hideProvidersTitle: widget.hideProvidersTitle,
             introWidget: widget.introWidget,
             initialIsoCode: widget.initialIsoCode,
+
+            //AGGIUNTI DA ME PER IL FOCUS
+            userFocusNode:
+                widget.userFocusNode ?? FocusNode(), // Passa il FocusNode
+            passwordFocusNode:
+                widget.passwordFocusNode ?? FocusNode(), // Passa il FocusNode
+            confirmPasswordFocusNode: widget.confirmPasswordFocusNode ??
+                FocusNode(), // Passa il FocusNode
           ),
         );
       case _recoveryIndex:

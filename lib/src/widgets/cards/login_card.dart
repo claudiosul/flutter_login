@@ -6,6 +6,11 @@ final email = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
 class _LoginCard extends StatefulWidget {
   const _LoginCard({
     super.key,
+
+    ///AGGIUNTI DA ME PER FOCUS
+    required this.userFocusNode,
+    required this.passwordFocusNode,
+    required this.confirmPasswordFocusNode,
     required this.loadingController,
     required this.userValidator,
     required this.validateUserImmediately,
@@ -24,6 +29,11 @@ class _LoginCard extends StatefulWidget {
     this.introWidget,
     required this.initialIsoCode,
   });
+
+  ///AGGIUNTI DA ME PER FOCUS
+  final FocusNode userFocusNode;
+  final FocusNode passwordFocusNode;
+  final FocusNode confirmPasswordFocusNode;
 
   final AnimationController loadingController;
   final FormFieldValidator<String>? userValidator;
@@ -51,9 +61,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   final _userFieldKey = GlobalKey<FormFieldState>();
-  final _userFocusNode = FocusNode();
-  final _passwordFocusNode = FocusNode();
-  final _confirmPasswordFocusNode = FocusNode();
+  // final widget.userFocusNode = FocusNode();
+  // final widget.passwordFocusNode = FocusNode();
+  // final widget.confirmPasswordFocusNode = FocusNode();
 
   late TextEditingController _nameController;
   late TextEditingController _passController;
@@ -121,8 +131,8 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       ),
     );
 
-    _userFocusNode.addListener(() {
-      if (!_userFocusNode.hasFocus &&
+    widget.userFocusNode.addListener(() {
+      if (!widget.userFocusNode.hasFocus &&
           (widget.validateUserImmediately ?? false)) {
         _userFieldKey.currentState?.validate();
       }
@@ -141,9 +151,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   @override
   void dispose() {
     widget.loadingController.removeStatusListener(handleLoadingAnimationStatus);
-    _userFocusNode.dispose();
-    _passwordFocusNode.dispose();
-    _confirmPasswordFocusNode.dispose();
+    // widget.userFocusNode.dispose();
+    // widget.passwordFocusNode.dispose();
+    // widget.confirmPasswordFocusNode.dispose();
 
     _switchAuthController.dispose();
     _postSwitchAuthController.dispose();
@@ -386,9 +396,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       prefixIcon: getPrefixIcon(widget.userType),
       keyboardType: getKeyboardType(widget.userType),
       textInputAction: TextInputAction.next,
-      focusNode: _userFocusNode,
+      focusNode: widget.userFocusNode,
       onFieldSubmitted: (value) {
-        FocusScope.of(context).requestFocus(_passwordFocusNode);
+        FocusScope.of(context).requestFocus(widget.passwordFocusNode);
       },
       validator: widget.userValidator,
       onSaved: (value) => auth.email = value!,
@@ -411,13 +421,13 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       controller: _passController,
       textInputAction:
           auth.isLogin ? TextInputAction.done : TextInputAction.next,
-      focusNode: _passwordFocusNode,
+      focusNode: widget.passwordFocusNode,
       onFieldSubmitted: (value) {
         if (auth.isLogin) {
           _submit();
         } else {
           // SignUp
-          FocusScope.of(context).requestFocus(_confirmPasswordFocusNode);
+          FocusScope.of(context).requestFocus(widget.confirmPasswordFocusNode);
         }
       },
       validator: widget.passwordValidator,
@@ -441,7 +451,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       labelText: messages.confirmPasswordHint,
       controller: _confirmPassController,
       textInputAction: TextInputAction.done,
-      focusNode: _confirmPasswordFocusNode,
+      focusNode: widget.confirmPasswordFocusNode,
       onFieldSubmitted: (value) => _submit(),
       validator: auth.isSignup
           ? (value) {
@@ -732,7 +742,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
                 ? ExpandableContainerState.shrunk
                 : ExpandableContainerState.expanded,
             alignment: Alignment.topLeft,
-            color: theme.cardTheme.color,
+            color: theme.cardTheme.color != null
+                ? theme.cardTheme.color!.withOpacity(0.95)
+                : theme.colorScheme.surface.withOpacity(0.95),
             width: cardWidth,
             padding: const EdgeInsets.symmetric(horizontal: cardPadding),
             onExpandCompleted: () => _postSwitchAuthController.forward(),

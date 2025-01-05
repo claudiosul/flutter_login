@@ -274,6 +274,11 @@ class __HeaderState extends State<_Header> {
 class FlutterLogin extends StatefulWidget {
   FlutterLogin({
     super.key,
+
+    ///AGGIUNTI DA ME PER FOCUS
+    this.userFocusNode,
+    this.passwordFocusNode,
+    this.confirmPasswordFocusNode,
     this.onSignup,
     required this.onLogin,
     required this.onRecoverPassword,
@@ -316,6 +321,11 @@ class FlutterLogin extends StatefulWidget {
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
   })  : assert((logo is String?) || (logo is ImageProvider?)),
         logo = logo is String ? AssetImage(logo) : logo as ImageProvider?;
+
+  ///AGGIUNTI DA ME PER FOCUS
+  final FocusNode? userFocusNode;
+  final FocusNode? passwordFocusNode;
+  final FocusNode? confirmPasswordFocusNode;
 
   /// Called when the user hit the submit button when in sign up mode
   ///
@@ -858,6 +868,15 @@ class _FlutterLoginState extends State<FlutterLogin>
                             widget.confirmSignupKeyboardType,
                         introWidget: widget.headerWidget,
                         initialIsoCode: widget.initialIsoCode,
+
+                        ///AGGIUNTI DA ME PER FOCUS
+                        userFocusNode:
+                            widget.userFocusNode ?? FocusNode(), // Aggiunto
+                        passwordFocusNode:
+                            widget.passwordFocusNode ?? FocusNode(), // Aggiunto
+                        confirmPasswordFocusNode:
+                            widget.confirmPasswordFocusNode ??
+                                FocusNode(), // Aggiunto
                       ),
                     ),
                     Positioned(
