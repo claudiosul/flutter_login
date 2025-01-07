@@ -131,7 +131,7 @@ class _Header extends StatefulWidget {
   const _Header({
     this.logo,
     this.logoTag,
-    this.logoWidth = 0.75,
+    this.logoWidth = 1,
     this.title,
     this.titleTag,
     this.height = 250.0,
@@ -202,26 +202,34 @@ class __HeaderState extends State<_Header> {
     final theme = Theme.of(context);
     const gap = 5.0;
     final logoHeight = min(
-      (widget.height - MediaQuery.of(context).padding.top) - _titleHeight - gap,
+      (widget.height - MediaQuery.of(context).padding.top) - _titleHeight,
       kMaxLogoHeight,
     );
     final displayLogo = widget.logo != null && logoHeight >= kMinLogoHeight;
-    final cardWidth = min(MediaQuery.of(context).size.width * 0.75, 360.0);
+    final cardWidth = min(MediaQuery.of(context).size.width, 360.0);
+    //final cardWidth = MediaQuery.of(context).size.width;
 
     var logo = widget.logo != null
-        ? SizedBox(
+        ? Container(
             height: logoHeight,
             width: widget.logoWidth * cardWidth,
-            child: widget.logo, // Usa direttamente il widget passato
+            // decoration: BoxDecoration(
+            //   border: Border.all(
+            //     color: Colors.red, // Colore del bordo
+            //     width: 2.0, // Spessore del bordo
+            //   ),
+            // ),
+            // height: widget.height,
+            child: widget.logo,
           )
         : const SizedBox.shrink();
 
-    // if (widget.logoTag != null) {
-    //   logo = Hero(
-    //     tag: widget.logoTag!,
-    //     child: logo,
-    //   );
-    // }
+    if (widget.logoTag != null) {
+      logo = Hero(
+        tag: widget.logoTag!,
+        child: logo,
+      ) as SizedBox;
+    }
 
     Widget? title;
     if (widget.titleTag != null && !isNullOrEmpty(widget.title)) {
@@ -245,6 +253,7 @@ class __HeaderState extends State<_Header> {
     }
 
     return SafeArea(
+      top: false,
       child: SizedBox(
         height: widget.height - MediaQuery.of(context).padding.top,
         child: Column(
@@ -257,7 +266,7 @@ class __HeaderState extends State<_Header> {
                 fadeDirection: FadeDirection.topToBottom,
                 child: logo,
               ),
-            const SizedBox(height: gap),
+            // const SizedBox(height: gap),
             FadeIn(
               controller: widget.titleController,
               offset: .5,
@@ -561,7 +570,7 @@ class _FlutterLoginState extends State<FlutterLogin>
       height: height,
       logo: widget.logo,
       logoTag: widget.logoTag,
-      logoWidth: widget.theme?.logoWidth ?? 0.75,
+      logoWidth: widget.theme?.logoWidth ?? 1,
       title: widget.title,
       titleTag: widget.titleTag,
       loginTheme: loginTheme,
@@ -701,7 +710,8 @@ class _FlutterLoginState extends State<FlutterLogin>
         surfaceTintColor: cardTheme.surfaceTintColor,
         color: cardTheme.color ?? theme.cardColor,
         elevation: cardTheme.elevation ?? 12.0,
-        margin: cardTheme.margin ?? const EdgeInsets.all(4.0),
+        margin:
+            EdgeInsets.zero, //cardTheme.margin ?? const EdgeInsets.all(4.0),
         shape: cardTheme.shape ??
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       ),
@@ -776,7 +786,7 @@ class _FlutterLoginState extends State<FlutterLogin>
     final loginTheme = widget.theme ?? LoginTheme();
     final theme = _mergeTheme(theme: Theme.of(context), loginTheme: loginTheme);
     final deviceSize = MediaQuery.of(context).size;
-    final headerMargin = loginTheme.headerMargin ?? 15;
+    final headerMargin = 0; // loginTheme.headerMargin ?? 0;
     final cardInitialHeight = loginTheme.cardInitialHeight ?? 300;
     final cardTopPosition = loginTheme.cardTopPosition ??
         max(deviceSize.height / 2 - cardInitialHeight / 2, 85);
@@ -883,7 +893,7 @@ class _FlutterLoginState extends State<FlutterLogin>
                       ),
                     ),
                     Positioned(
-                      top: cardTopPosition - headerHeight - headerMargin,
+                      top: cardTopPosition - headerHeight, // - headerMargin,
                       child: _buildHeader(headerHeight, loginTheme),
                     ),
                     Positioned.fill(
