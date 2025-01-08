@@ -134,7 +134,7 @@ class _Header extends StatefulWidget {
     this.logoWidth = 1,
     this.title,
     this.titleTag,
-    this.height = 250.0,
+    this.height = 100.0,
     this.logoController,
     this.titleController,
     required this.loginTheme,
@@ -202,16 +202,16 @@ class __HeaderState extends State<_Header> {
     final theme = Theme.of(context);
     const gap = 5.0;
     final logoHeight = min(
-      (widget.height - MediaQuery.of(context).padding.top) - _titleHeight,
+      (widget.height) - _titleHeight,
       kMaxLogoHeight,
-    );
+    ); //grandezza del logo, non toccare
     final displayLogo = widget.logo != null && logoHeight >= kMinLogoHeight;
     final cardWidth = min(MediaQuery.of(context).size.width, 360.0);
     //final cardWidth = MediaQuery.of(context).size.width;
 
     var logo = widget.logo != null
         ? Container(
-            height: logoHeight,
+            height: logoHeight, //grandezza del logo, non toccare
             width: widget.logoWidth * cardWidth,
             // decoration: BoxDecoration(
             //   border: Border.all(
@@ -254,8 +254,14 @@ class __HeaderState extends State<_Header> {
 
     return SafeArea(
       top: false,
-      child: SizedBox(
-        height: widget.height - MediaQuery.of(context).padding.top,
+      child: Container(
+        // decoration: BoxDecoration(
+        //   border: Border.all(
+        //     color: Colors.blue, // Colore del bordo
+        //     width: 2.0, // Spessore del bordo
+        //   ),
+        // ),
+        height: widget.height, // - MediaQuery.of(context).padding.top,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
@@ -710,8 +716,7 @@ class _FlutterLoginState extends State<FlutterLogin>
         surfaceTintColor: cardTheme.surfaceTintColor,
         color: cardTheme.color ?? theme.cardColor,
         elevation: cardTheme.elevation ?? 12.0,
-        margin:
-            EdgeInsets.zero, //cardTheme.margin ?? const EdgeInsets.all(4.0),
+        margin: cardTheme.margin ?? const EdgeInsets.all(0),
         shape: cardTheme.shape ??
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       ),
@@ -723,7 +728,7 @@ class _FlutterLoginState extends State<FlutterLogin>
               Colors.grey.withOpacity(.04),
             ),
         contentPadding: inputTheme.contentPadding ??
-            const EdgeInsets.symmetric(vertical: 4.0),
+            const EdgeInsets.symmetric(vertical: 0.0),
         errorStyle: inputTheme.errorStyle ?? TextStyle(color: errorColor),
         labelStyle: inputTheme.labelStyle ?? labelStyle,
         enabledBorder: inputTheme.enabledBorder ??
