@@ -37,7 +37,7 @@ typedef ProviderDirectCallback = Future? Function();
 typedef RecoverCallback = Future<String?>? Function(String);
 
 /// The result is an error message, callback successes if message is null
-typedef ConfirmSignupCallback = Future<String?>? Function(String, LoginData);
+typedef ConfirmSignupCallback = Future<String?>? Function(String, SignupData);
 
 typedef ConfirmSignupRequiredCallback = Future<bool> Function(LoginData);
 

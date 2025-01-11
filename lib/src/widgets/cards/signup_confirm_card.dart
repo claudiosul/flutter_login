@@ -62,9 +62,10 @@ class _ConfirmSignupCardState extends State<_ConfirmSignupCard>
     setState(() => _isSubmitting = true);
     final error = await auth.onConfirmSignup!(
       _code,
-      LoginData(
+      SignupData.fromSignupForm(
         name: auth.email,
         password: auth.password,
+        additionalSignupData: auth.additionalSignupData,
       ),
     );
 
